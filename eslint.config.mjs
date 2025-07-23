@@ -1,10 +1,11 @@
 // @ts-check
-import withNuxt from './.nuxt/eslint.config.mjs'
+import antfu from '@antfu/eslint-config'
 
-export default withNuxt(
-  {
-    rules: {
-      'vue/no-deprecated-slot-attribute': 'off',
-    },
+export default antfu({
+  typescript: true,
+  vue: true,
+  rules: {
+    'vue/no-deprecated-slot-attribute': 'off',
+    'no-console': 'warn',
   },
-)
+})

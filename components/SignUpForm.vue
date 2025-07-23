@@ -1,10 +1,31 @@
 <script setup lang="ts">
+import EmailInput from '@/components/email/EmailInput.vue'
+import PasswordInput from '~/components/password/PasswordInput.vue'
 import '@nordhealth/components/lib/Stack'
 import '@nordhealth/components/lib/Button'
 import '@nordhealth/components/lib/Card'
 import '@nordhealth/components/lib/Checkbox'
-import EmailInput from '@/components/email/EmailInput.vue'
-import PasswordInput from '~/components/password/PasswordInput.vue'
+
+const terms = useTemplateRef<HTMLInputElement>('terms')
+const subscription = useTemplateRef<HTMLInputElement>('subscription')
+
+interface SignUpForm {
+  email: string
+  password: string
+  terms: boolean
+  subscription: boolean
+}
+
+const form = ref<SignUpForm>({
+  email: '',
+  password: '',
+  terms: false,
+  subscription: false,
+})
+
+async function handleSubmit() {
+  console.log(form)
+}
 </script>
 
 <template>
@@ -15,19 +36,22 @@ import PasswordInput from '~/components/password/PasswordInput.vue'
     <h1 slot="header">
       Create an account
     </h1>
-    <form action="#">
+    <form @submit.prevent="handleSubmit">
       <nord-stack>
-        <EmailInput />
-        <PasswordInput />
+        <EmailInput v-model="form.email" />
+        <PasswordInput v-model="form.password" />
 
         <nord-checkbox
+          ref="terms"
           label="I accept terms of service"
           required
-          value="Value"
+          error=""
+          @change="() => { form.terms = !!terms?.checked }"
         />
         <nord-checkbox
+          ref="subscription"
           label="Opt in to receive occasional product updates and announcements"
-          value="Value"
+          @change="() => { form.subscription = !!subscription?.checked }"
         />
 
         <nord-button

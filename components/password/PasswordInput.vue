@@ -1,14 +1,16 @@
 <script setup lang="ts">
+import { computed, ref } from 'vue'
 import '@nordhealth/components/lib/Input'
 import '@nordhealth/components/lib/Button'
 import '@nordhealth/components/lib/Icon'
+
 import '@nordhealth/components/lib/Tooltip'
 
-import { ref, computed } from 'vue'
+const password = defineModel<string>({ required: true })
 
 const isPasswordVisible = ref(false)
 const passwordType = computed(() => isPasswordVisible.value ? 'text' : 'password')
-const togglePasswordVisibility = () => {
+function togglePasswordVisibility() {
   isPasswordVisible.value = !isPasswordVisible.value
 }
 
@@ -19,10 +21,10 @@ const error = ref('')
 <template>
   <div>
     <nord-input
+      v-model="password"
       expand
       required
       label="Password"
-      value="Secret password 123"
       :type="passwordType"
       :error="error"
     >

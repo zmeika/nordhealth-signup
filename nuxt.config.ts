@@ -2,7 +2,7 @@
 import { defineNuxtConfig } from 'nuxt/config'
 
 export default defineNuxtConfig({
-  modules: ['@nuxt/eslint', '@nuxt/test-utils'],
+  modules: ['@nuxt/test-utils'],
   ssr: false,
   devtools: { enabled: true },
   css: ['@nordhealth/css', '@nordhealth/themes/lib/vet.css'],

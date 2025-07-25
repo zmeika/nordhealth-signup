@@ -6,6 +6,7 @@ const email = defineModel <string> ({ required: true })
 
 <template>
   <nord-input
+    id="email"
     v-model="email"
     expand
     required

@@ -21,6 +21,7 @@ const error = ref('')
 <template>
   <div>
     <nord-input
+      id="password"
       v-model="password"
       expand
       required

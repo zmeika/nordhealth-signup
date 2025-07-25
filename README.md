@@ -7,7 +7,7 @@ Create a client-side only rendered Nuxt 3 application that allows people to sign
 ## Details
 
 - Fields are validated using zod library on blur and before form submit.
-- Store is added because user info is usually something needed across whole application, so it's better to keep it in one place. I use this data on success page. 
+- Store is added because user info is usually something needed across whole application, so it's better to keep it in one place. I use this data on success page.
 - Use __existing@example.com__ to get "already existing" error.
 
 ## Room for growth
@@ -18,3 +18,4 @@ Create a client-side only rendered Nuxt 3 application that allows people to sign
 - Add a component that shows password strength, as well as validation rules for password.
 - Add error.vue to customize error pages like 404
 - Add unit and e2e tests
+- Add i18n and move all texts to a separate json file

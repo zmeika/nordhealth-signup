@@ -14,7 +14,6 @@ const terms = useTemplateRef<HTMLInputElement>('terms')
 const subscription = useTemplateRef<HTMLInputElement>('subscription')
 
 const { signup } = useUserStore()
-const router = useRouter()
 const serverError = ref('')
 
 interface SignUpForm {
@@ -73,7 +72,7 @@ async function handleSubmit() {
     const result = await signup({ ...form.value })
 
     if (result.success) {
-      router.push('/success')
+      navigateTo('/success')
     }
     else {
       serverError.value = result.error
@@ -127,7 +126,7 @@ async function handleSubmit() {
   </nord-stack>
 </template>
 
-<style>
+<style scoped>
 .form-container {
   max-inline-size: 340px;
   margin: var(--n-space-xl) auto;

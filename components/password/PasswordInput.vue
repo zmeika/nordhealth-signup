@@ -20,7 +20,7 @@ function togglePasswordVisibility() {
 </script>
 
 <template>
-  <div class="pwd">
+  <div>
     <nord-input v-bind="$attrs" id="password" v-model="password" expand required label="Password" :type="passwordType">
       <nord-button slot="end" aria-describedby="password-tooltip" square @click="togglePasswordVisibility">
         <nord-icon name="interface-edit-on" />

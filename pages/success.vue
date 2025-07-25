@@ -1,15 +1,21 @@
 <script lang="ts" setup>
 import { useUserStore } from '@/stores/user'
 
-const { user } = useUserStore()
+const userStore = useUserStore()
+const { user } = storeToRefs(userStore)
+
+// Redirect if the user lands here without signing up
+if (!user.value) {
+  await navigateTo('/signup', { replace: true })
+}
 </script>
 
 <template>
-  <div class="n-typeset n-padding-l">
+  <div v-if="user" class="n-typeset n-padding-l">
     <h1 slot="header">
       Success
     </h1>
-    <p v-if="user?.subscription">
+    <p v-if="user.subscription">
       You have subscribed to receive occasional product updates and announcements to
       {{ user.email }}
     </p>

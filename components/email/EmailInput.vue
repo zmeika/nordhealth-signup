@@ -10,7 +10,6 @@ const email = defineModel <string> ({ required: true })
     v-model="email"
     expand
     required
-    error=""
     label="Email"
     placeholder="mail@example.com"
   />

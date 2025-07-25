@@ -1,6 +1,8 @@
 // Just mocks
 export default defineEventHandler(async (event) => {
-  const { email, terms, subscription } = await readBody(event)
+  // Disabling eslint error for mock purposes
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  const { email, password, terms, subscription } = await readBody(event)
 
   if (email === 'existing@example.com') {
     throw createError({

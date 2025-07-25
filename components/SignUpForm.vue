@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import * as z from 'zod'
 import EmailInput from '@/components/email/EmailInput.vue'
 import PasswordInput from '@/components/password/PasswordInput.vue'
 import { useUserStore } from '@/stores/user'
@@ -22,6 +24,15 @@ interface SignUpForm {
   subscription: boolean
 }
 
+const fieldSchemas = {
+  email: z.email({
+    error: iss => iss.input === '' ? 'This field is required.' : 'Please, enter valid email address.',
+  }),
+  password: z.string().min(8, { error: iss => iss.input === '' ? 'This field is required.' : 'Too short!' }).max(30, { error: 'Too long!' }),
+  terms: z.literal(true, { error: 'This field is required' }),
+  subscription: z.boolean().optional(),
+}
+
 const form = ref<SignUpForm>({
   email: '',
   password: '',
@@ -29,8 +40,34 @@ const form = ref<SignUpForm>({
   subscription: false,
 })
 
+const formErrors = ref<Record<keyof SignUpForm, string>>({
+  email: '',
+  password: '',
+  terms: '',
+  subscription: '',
+})
+
+function validateInput(inputName: keyof SignUpForm) {
+  const result = fieldSchemas[inputName].safeParse(form.value[inputName])
+
+  if (!result.success) {
+    formErrors.value[inputName] = result.error.issues[0].message
+  }
+}
+
+function resetError(inputName: keyof SignUpForm) {
+  formErrors.value[inputName] = ''
+}
+
+const isFormValid = computed(() => {
+  return !!form.value.email && !Object.keys(formErrors.value).some(field => formErrors.value[field as keyof SignUpForm] !== '')
+})
+
 async function handleSubmit() {
-  // TODO: verify
+  Object.keys(form.value).forEach(field => validateInput(field as keyof SignUpForm))
+
+  if (!isFormValid.value)
+    return
 
   try {
     const result = await signup({ ...form.value })
@@ -61,16 +98,23 @@ async function handleSubmit() {
       </h1>
       <form @submit.prevent="handleSubmit">
         <nord-stack>
-          <EmailInput v-model="form.email" />
-          <PasswordInput v-model="form.password" />
+          <EmailInput
+            v-model="form.email" :error="formErrors.email" @input="resetError('email')"
+            @blur="validateInput('email')"
+          />
+          <PasswordInput
+            v-model="form.password" :error="formErrors.password || undefined" @input="resetError('password')"
+            @blur="validateInput('password')"
+          />
 
           <nord-checkbox
-            id="terms" ref="terms" label="I accept terms of service" required error=""
-            @change="() => { form.terms = !!terms?.checked }"
+            id="terms" ref="terms" label="I accept terms of service" required :error="formErrors.terms"
+            @change="() => { resetError('terms'); form.terms = !!terms?.checked; console.log(form.terms); validateInput('terms'); }"
           />
+
           <nord-checkbox
             id="subscription" ref="subscription"
-            label="Opt in to receive occasional product updates and announcements"
+            label="Opt in to receive occasional product updates and announcements" :error="formErrors.subscription"
             @change="() => { form.subscription = !!subscription?.checked }"
           />
 
@@ -88,6 +132,7 @@ async function handleSubmit() {
   max-inline-size: 340px;
   margin: var(--n-space-xl) auto;
 }
+
 .form-banner {
   transform: translateY(0);
   transform-origin: center top;

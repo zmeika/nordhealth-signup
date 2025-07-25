@@ -6,6 +6,10 @@ import '@nordhealth/components/lib/Icon'
 
 import '@nordhealth/components/lib/Tooltip'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const password = defineModel<string>({ required: true })
 
 const isPasswordVisible = ref(false)
@@ -13,28 +17,12 @@ const passwordType = computed(() => isPasswordVisible.value ? 'text' : 'password
 function togglePasswordVisibility() {
   isPasswordVisible.value = !isPasswordVisible.value
 }
-
-// when empty string is passed as an error, custom button border is red while input border has default color
-const error = ref('')
 </script>
 
 <template>
-  <div>
-    <nord-input
-      id="password"
-      v-model="password"
-      expand
-      required
-      label="Password"
-      :type="passwordType"
-      :error="error"
-    >
-      <nord-button
-        slot="end"
-        aria-describedby="password-tooltip"
-        square
-        @click="togglePasswordVisibility"
-      >
+  <div class="pwd">
+    <nord-input v-bind="$attrs" id="password" v-model="password" expand required label="Password" :type="passwordType">
+      <nord-button slot="end" aria-describedby="password-tooltip" square @click="togglePasswordVisibility">
         <nord-icon name="interface-edit-on" />
         <nord-icon name="interface-edit-off" />
       </nord-button>
